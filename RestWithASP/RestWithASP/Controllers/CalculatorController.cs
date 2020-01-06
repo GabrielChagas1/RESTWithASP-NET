@@ -10,48 +10,61 @@ namespace RestWithASP.Controllers
     [Route("api/[controller]")]
     public class CalculatorController : Controller
     {
+
+        Methods Methods = new Methods();
         // GET api/values/5
         [HttpGet("sum/{firstNumber}/{secondNumber}")]
         public ActionResult<string> Sum(string firstNumber, string secondNumber)
         {
-           if(IsNumeric(firstNumber) && IsNumeric(secondNumber))
+           if(Methods.IsNumeric(firstNumber) && Methods.IsNumeric(secondNumber))
            {
-                var Sum = ConvertToDecimal(firstNumber) + ConvertToDecimal(secondNumber);
+                var Sum = Methods.ConvertToDecimal(firstNumber) + Methods.ConvertToDecimal(secondNumber);
                 return Ok(Sum.ToString());
            }
            return BadRequest("Invalid Input");
 
         }
 
-        [HttpGet("sub/{firstNumber}/{secondNumber}")]
-        public ActionResult<string> Sub(string firstNumber, string secondNumber)
+        [HttpGet("subtraction/{firstNumber}/{secondNumber}")]
+        public ActionResult<string> Subtraction(string firstNumber, string secondNumber)
         {
-            if(IsNumeric(firstNumber) && IsNumeric(secondNumber))
+            if(Methods.IsNumeric(firstNumber) && Methods.IsNumeric(secondNumber))
             {
-                var Sub = ConvertToDecimal(firstNumber) - ConvertToDecimal(secondNumber);
+                var Sub = Methods.ConvertToDecimal(firstNumber) - Methods.ConvertToDecimal(secondNumber);
                 return Ok(Sub.ToString());
             }
             return BadRequest("Invalid Input");
         }
 
-        [HttpGet("mul/{firstNumber}/{secondNumber}")]
-        public ActionResult<string> Mul(string firstNumber, string secondNumber)
+        [HttpGet("multiplication/{firstNumber}/{secondNumber}")]
+        public ActionResult<string> Multiplication(string firstNumber, string secondNumber)
         {
-            if (IsNumeric(firstNumber) && IsNumeric(secondNumber))
+            if (Methods.IsNumeric(firstNumber) && Methods.IsNumeric(secondNumber))
             {
-                var Mult = ConvertToDecimal(firstNumber) * ConvertToDecimal(secondNumber);
+                var Mult = Methods.ConvertToDecimal(firstNumber) * Methods.ConvertToDecimal(secondNumber);
                 return Ok(Mult.ToString());
             }
             return BadRequest("Invalid Input");
         }
 
-        [HttpGet("div/{firstNumber}/{secondNumber}")]
-        public ActionResult<string> Div(string firstNumber, string secondNumber)
+        [HttpGet("division/{firstNumber}/{secondNumber}")]
+        public ActionResult<string> Division(string firstNumber, string secondNumber)
         {
-            if (IsNumeric(firstNumber) && IsNumeric(secondNumber))
+            if (Methods.IsNumeric(firstNumber) && Methods.IsNumeric(secondNumber))
             {
-                var Div = ConvertToDecimal(firstNumber) / ConvertToDecimal(secondNumber);
+                var Div = Methods.ConvertToDecimal(firstNumber) / Methods.ConvertToDecimal(secondNumber);
                 return Ok(Div.ToString());
+            }
+            return BadRequest("Invalid Input");
+        }
+
+        [HttpGet("average/{firstNumber}/{secondNumber}")]
+        public ActionResult<string> AverageNumbers(string firstNumber, string secondNumber)
+        {
+            if (Methods.IsNumeric(firstNumber) && Methods.IsNumeric(secondNumber))
+            {
+                var avarage = (Methods.ConvertToDecimal(firstNumber) + Methods.ConvertToDecimal(secondNumber) /2);
+                return Ok(avarage.ToString());
             }
             return BadRequest("Invalid Input");
         }
@@ -59,37 +72,11 @@ namespace RestWithASP.Controllers
         [HttpGet("root/{Number}")]
         public ActionResult<string> Root(string Number)
         {
-            if (IsNumeric(Number))
+            if (Methods.IsNumeric(Number))
             {
-                return Ok(Math.Sqrt(ConvertToDouble(Number)).ToString());
+                return Ok(Math.Sqrt((double)Methods.ConvertToDecimal(Number)).ToString());
             }
             return BadRequest("Invalid Input");
-        }
-
-        //Métodos de conversões 
-        private Double ConvertToDouble(string Number)
-        {
-            if(Double.TryParse(Number, out Double Value))
-            {
-                return Value;
-            }
-            return 0;
-        }
-
-        private Decimal ConvertToDecimal(string Number)
-        {
-            decimal DecimalValue;
-            if (decimal.TryParse(Number, out DecimalValue))
-            {
-                return DecimalValue;
-            }
-            return 0;
-        }
-
-        private bool IsNumeric(string StrNumber)
-        {
-            bool isNumber = double.TryParse(StrNumber, System.Globalization.NumberStyles.Any, System.Globalization.NumberFormatInfo.InvariantInfo, out double Number);
-            return isNumber;
         }
     }
 }
